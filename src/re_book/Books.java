@@ -5,7 +5,6 @@
  */
 package re_book;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**

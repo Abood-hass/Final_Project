@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -149,6 +152,13 @@ public class Admin_Control_PanelController implements Initializable {
         Column_Age_User.setCellValueFactory(new PropertyValueFactory("age"));
         Column_Password_User.setCellValueFactory(new PropertyValueFactory("password"));
         
+        Column_ID_Book.setCellValueFactory(new PropertyValueFactory("id"));
+        Column_Title_Book.setCellValueFactory(new PropertyValueFactory("title"));
+        Column_Price_Book.setCellValueFactory(new PropertyValueFactory("price"));
+        Column_RD_Book.setCellValueFactory(new PropertyValueFactory("releaseDate"));
+        Column_Ranking_Book.setCellValueFactory(new PropertyValueFactory("ranking"));
+        Column_Author_Book.setCellValueFactory(new PropertyValueFactory("author"));
+        
          TV_Books.
                     getSelectionModel().
                     selectedItemProperty().
@@ -169,25 +179,35 @@ public class Admin_Control_PanelController implements Initializable {
 
     @FXML
      void Add_User(ActionEvent event) throws SQLException {
+        
               int id = Integer.parseInt(TF_ID_User.getText());
-         double B = Double.parseDouble(TF_Balance.getText());
+         double Balance = Double.parseDouble(TF_Balance.getText());
          
-        this.statement.executeUpdate("Insert into users Values"
-                + "("+id+",'"+TF_Name_User.getText()+"','"+TF_Password.getText()+"','"+DP_Birth_Date.getValue()+"', "+TF_Age_User.getText()+","+B+")");
+//         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+//            Date date = new Date();
+            
+//    if(DP_Birth_Date.getValue().isBefore(D)){
+            this.statement.executeUpdate("Insert into users (id, name, Password, date_birth, age, balance)"
+                + "Values ("+id+",'"+TF_Name_User.getText()+"','"+TF_Password.getText()+"','"+DP_Birth_Date.getValue()+"', "+TF_Age_User.getText()+","+Balance+")");
     
          
-         try{
         ShowUsers();
-        }catch(SQLException ex){
-            ex.getMessage();
-            
-        }
          reset();
     }
+//    }
+   
     
     @FXML
-     void Edit_User(ActionEvent event) {
+     void Edit_User(ActionEvent event) throws SQLException{
+         if(TF_ID_User.getText().isEmpty() || TF_Name_User.getText().isEmpty() 
+                 || TF_Balance.getText().isEmpty() || TF_Age_User.getText().isEmpty() || TF_Password.getText().isEmpty()){
+        }else{
+         int id = Integer.parseInt(TF_ID_User.getText());
+         double Balance = Double.parseDouble(TF_Balance.getText());
+         statement.executeUpdate("Update users SET name = '"+TF_Name_User.getText()+"' ,  Balance = '"+TF_Balance.getText()+"' ,Password = "+TF_Password.getText()+"   where id = "+id);
+         ShowUsers();
          reset();
+         }
     }
     
     
@@ -199,13 +219,44 @@ public class Admin_Control_PanelController implements Initializable {
          
         this.statement.executeUpdate("Insert into books Values"
                 + "("+id+",'"+TF_Title_Book.getText()+"','"+TF_Author.getText()+"', '"+CM_Rank.getValue()+"','"+DP_Release_Date.getValue()+"',"+Price+")");
+        ShowBooks();
         reset();
      }
     
     @FXML
-     void Edit_Book(ActionEvent event) {
+     void Edit_Book(ActionEvent event) throws SQLException{
+         if(TF_ID_Book.getText().isEmpty() || TF_Author.getText().isEmpty() 
+                 || CM_Rank.getValue().isEmpty() || TF_Title_Book.getText().isEmpty() ){
+        }else{
+         int id = Integer.parseInt(TF_ID_Book.getText());
+         double Price = Double.parseDouble(TF_Price.getText());
+         statement.executeUpdate("Update books SET title = '"+TF_Title_Book.getText()+"' ,  author = '"+TF_Author.getText()+"' ,price = "+Price+",  ranking = '"+CM_Rank.getValue()+"'   where id = "+id);
+         ShowBooks();
+         reset();
+         }
+         
+     }
+    @FXML
+    void Delete_Book(ActionEvent event) throws SQLException {
+        if(TF_ID_Book.getText().isEmpty()){
+        }else{
+         int id = Integer.parseInt(TF_ID_Book.getText());
+         statement.executeUpdate("Delete From books where id = "+id);
+         ShowBooks();
+         reset();
+         }
     }
-    
+
+    @FXML
+    void Delete_User(ActionEvent event) throws SQLException {
+        if(TF_ID_User.getText().isEmpty()){
+        }else{
+         int id = Integer.parseInt(TF_ID_User.getText());
+         statement.executeUpdate("Delete From users where id = "+id);
+         ShowUsers();
+         reset();
+         }
+    }
     void reset(){
         TF_Age_User.setText(null);
         DP_Birth_Date.setValue(null);
@@ -223,6 +274,7 @@ public class Admin_Control_PanelController implements Initializable {
     }
     
     void ShowUsers() throws SQLException{
+        TV_Users.getItems().clear();
         ResultSet RS;
         RS = statement.executeQuery("Select * From users");
         while(RS.next()){
@@ -237,16 +289,16 @@ public class Admin_Control_PanelController implements Initializable {
         }
     }
     void ShowBooks() throws SQLException{
-         ResultSet RS;
-        RS = statement.executeQuery("Select * From books");
+        TV_Books.getItems().clear();
+        ResultSet RS = statement.executeQuery("Select * From books");
         while(RS.next()){
             Books book = new Books();
             book.setId(RS.getInt("id"));
             book.setTitle(RS.getString("title"));
-            book.setAuthor(RS.getString("author"));
-            book.setPrice(RS.getDouble("Price"));
-            book.setReleaseDate(RS.getDate("release_date"));
             book.setRanking(RS.getString("ranking"));
+            book.setPrice(RS.getInt("price"));
+            book.setReleaseDate(RS.getDate("release_date"));
+            book.setAuthor(RS.getString("author"));
             TV_Books.getItems().add(book);
         }
     }
@@ -255,19 +307,20 @@ public class Admin_Control_PanelController implements Initializable {
     private void ShowSelected_Users() {
         
         Users selected_user =  TV_Users.getSelectionModel().getSelectedItem();
-        reset();
+        if(selected_user != null){
         TF_ID_User.setText(selected_user.getId()+"");
         TF_Name_User.setText(selected_user.getName());
         TF_Age_User.setText(selected_user.getAge()+"");
 //        DP_Birth_Date.setValue(selected_user.getDateBirth());
         TF_Password.setText(selected_user.getPassword());
         TF_Balance.setText(selected_user.getBalance()+"");
+        }
         
     }
     
     private void ShowSelected_Books() {
         Books selected_book =  TV_Books.getSelectionModel().getSelectedItem();
-        reset();
+        if(selected_book != null){
         TF_ID_Book.setText(selected_book.getId()+"");
         TF_Title_Book.setText(selected_book.getTitle());
         CM_Rank.setValue(selected_book.getRanking());
@@ -275,6 +328,7 @@ public class Admin_Control_PanelController implements Initializable {
         TF_Author.setText(selected_book.getAuthor());
         TF_Price.setText(selected_book.getPrice()+"");
         
+    }
     }
     
     

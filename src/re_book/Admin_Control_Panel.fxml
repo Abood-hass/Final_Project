@@ -24,16 +24,6 @@
             <TableColumn fx:id="Column_BD_User" editable="false" prefWidth="73.0" text="BirthDate" />
         </columns>
       </TableView>
-      <TableView fx:id="TV_Books" layoutX="14.0" layoutY="227.0" prefHeight="200.0" prefWidth="567.0">
-        <columns>
-          <TableColumn fx:id="Column_ID_Book" prefWidth="87.0" text="ID" />
-          <TableColumn fx:id="Column_Title_Book" prefWidth="89.0" text="Title" />
-            <TableColumn fx:id="Column_Author_Book" prefWidth="72.0" text="Author" />
-            <TableColumn fx:id="Column_Ranking_Book" prefWidth="92.0" text="Ranking" />
-            <TableColumn fx:id="Column_RD_Book" prefWidth="158.0" text="Release Date" />
-            <TableColumn fx:id="Column_Price_Book" editable="false" prefWidth="68.0" text="Price" />
-        </columns>
-      </TableView>
       <TextField fx:id="TF_ID_Book" alignment="CENTER" layoutX="710.0" layoutY="47.0" prefHeight="22.0" prefWidth="170.0" />
       <TextField fx:id="TF_Title_Book" alignment="CENTER" layoutX="710.0" layoutY="98.0" prefHeight="22.0" prefWidth="170.0" />
       <ComboBox fx:id="CM_Rank" layoutX="710.0" layoutY="150.0" prefHeight="21.0" prefWidth="170.0" />
@@ -99,14 +89,7 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <Line endX="458.0" layoutX="717.0" layoutY="26.0" startX="-104.0" />
-      <Line endX="-72.5" endY="171.0" layoutX="685.0" layoutY="171.0" startX="-72.5" startY="-145.0" />
-      <Line endX="458.0" layoutX="717.0" layoutY="342.0" startX="-104.0" />
-      <Line endX="-72.5" endY="171.0" layoutX="1248.0" layoutY="171.0" startX="-72.5" startY="-145.0" />
-      <Line endX="458.0" layoutX="717.0" layoutY="423.0" startX="-104.0" />
-      <Line endX="-114.5" endY="71.0" layoutX="727.0" layoutY="352.0" startX="-114.5" startY="-10.5" />
-      <Line endX="-114.5" endY="71.0" layoutX="1290.0" layoutY="352.0" startX="-114.5" startY="-10.5" />
-      <Line endX="-114.5" endY="71.0" layoutX="1014.0" layoutY="352.0" startX="-114.5" startY="-325.5" />
+      <Line endX="-114.5" endY="102.0" layoutX="1014.0" layoutY="352.0" startX="-114.5" startY="-352.0" />
       <Button fx:id="Edit_Book" layoutX="761.0" layoutY="368.0" mnemonicParsing="false" onAction="#Edit_Book" prefHeight="28.0" prefWidth="119.0" text="Update Book">
          <font>
             <Font name="System Bold" size="15.0" />
@@ -134,5 +117,25 @@
             <Font size="15.0" />
          </font>
       </Text>
+      <TableView fx:id="TV_Books" layoutX="14.0" layoutY="241.0" prefHeight="200.0" prefWidth="567.0">
+         <columns>
+            <TableColumn fx:id="Column_ID_Book" prefWidth="86.0" text="ID" />
+            <TableColumn fx:id="Column_Title_Book" prefWidth="79.0" text="Title" />
+            <TableColumn fx:id="Column_Author_Book" prefWidth="111.0" text="Author" />
+            <TableColumn fx:id="Column_Ranking_Book" prefWidth="102.0" text="Ranking" />
+            <TableColumn fx:id="Column_Price_Book" prefWidth="62.0" text="Price" />
+            <TableColumn fx:id="Column_RD_Book" editable="false" prefWidth="126.0" text="Release Date" />
+         </columns>
+      </TableView>
+      <Button layoutX="692.0" layoutY="418.0" mnemonicParsing="false" onAction="#Delete_Book" prefHeight="22.0" prefWidth="119.0" text="Delete" textFill="#ff0707">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="986.0" layoutY="418.0" mnemonicParsing="false" onAction="#Delete_User" prefHeight="22.0" prefWidth="119.0" text="Delete" textFill="#ff0707">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
