@@ -5,6 +5,7 @@
  */
 package re_book;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -182,20 +183,23 @@ public class Admin_Control_PanelController implements Initializable{
     }    
 
     @FXML
-     void Add_User(ActionEvent event) throws SQLException {
+     void Add_User(ActionEvent event) throws SQLException, IOException {
         
          int id = Integer.parseInt(TF_ID_User.getText());
          double Balance = Double.parseDouble(TF_Balance.getText());
          String Pass = TF_Password.getText();
             this.statement.executeUpdate("Insert into users (id, name, Password, date_birth, age, balance)"
                 + "Values ("+id+",'"+TF_Name_User.getText()+"','"+md5Java(Pass)+"','"+DP_Birth_Date.getValue()+"', "+TF_Age_User.getText()+","+Balance+")");
-            a.showAndWait();
+            
+        a.showAndWait();
+        ReBook.LogWriter.println("Insert User ("+id+",'"+TF_Name_User.getText()+"','"+Pass+"','"+DP_Birth_Date.getValue()+"', "+TF_Age_User.getText()+","+Balance+")\n");
+        ReBook.LogWriter.close();
         ShowUsers();
          reset();
     }
      
     @FXML
-     void Edit_User(ActionEvent event) throws SQLException{
+     void Edit_User(ActionEvent event) throws SQLException, IOException{
          if(TF_ID_User.getText().isEmpty() || TF_Name_User.getText().isEmpty() 
                  || TF_Balance.getText().isEmpty() || TF_Age_User.getText().isEmpty() || TF_Password.getText().isEmpty()){
         }else{
@@ -205,6 +209,8 @@ public class Admin_Control_PanelController implements Initializable{
          
          statement.executeUpdate("Update users SET name = '"+TF_Name_User.getText()+"' ,  Balance = '"+Balance+"' ,Password = '"+md5Java(Pass)+"'   where id = "+id);
          a.showAndWait();
+         ReBook.LogWriter.println("Update User have id = "+id+" name = '"+TF_Name_User.getText()+"' ,  Balance = '"+Balance+"' ,Password = '"+Pass+"'   \n");
+         ReBook.LogWriter.close();
          ShowUsers();
          reset();
          }
@@ -212,7 +218,7 @@ public class Admin_Control_PanelController implements Initializable{
     
     
     @FXML
-     void Add_Book(ActionEvent event) throws SQLException {
+     void Add_Book(ActionEvent event) throws SQLException, IOException {
         
          int id = Integer.parseInt(TF_ID_Book.getText());
          double Price = Double.parseDouble(TF_Price.getText());
@@ -220,12 +226,14 @@ public class Admin_Control_PanelController implements Initializable{
         this.statement.executeUpdate("Insert into books Values"
                 + "("+id+",'"+TF_Title_Book.getText()+"','"+TF_Author.getText()+"', '"+CM_Rank.getValue()+"','"+DP_Release_Date.getValue()+"',"+Price+")");
         a.showAndWait();
+        ReBook.LogWriter.println("Add Book (id = "+id+" Title = '"+TF_Title_Book.getText()+"' ,'"+TF_Author.getText()+"', '"+DP_Release_Date.getValue()+"', Price = '"+Price+")'\n");
+        ReBook.LogWriter.close();
         ShowBooks();
         reset();
      }
     
     @FXML
-     void Edit_Book(ActionEvent event) throws SQLException{
+     void Edit_Book(ActionEvent event) throws SQLException, IOException{
          if(TF_ID_Book.getText().isEmpty() || TF_Author.getText().isEmpty() 
                  || CM_Rank.getValue().isEmpty() || TF_Title_Book.getText().isEmpty() ){
         }else{
@@ -233,30 +241,36 @@ public class Admin_Control_PanelController implements Initializable{
          double Price = Double.parseDouble(TF_Price.getText());
          statement.executeUpdate("Update books SET title = '"+TF_Title_Book.getText()+"' ,  author = '"+TF_Author.getText()+"' ,price = "+Price+",  ranking = '"+CM_Rank.getValue()+"'   where id = "+id);
          a.showAndWait();
+         ReBook.LogWriter.println("Update books id = "+id+" title = '"+TF_Title_Book.getText()+"' ,  author = '"+TF_Author.getText()+"' ,price = "+Price+",  ranking = '"+CM_Rank.getValue()+"'\n");
+         ReBook.LogWriter.close();
          ShowBooks();
          reset();
          }
          
      }
     @FXML
-    void Delete_Book(ActionEvent event) throws SQLException {
+    void Delete_Book(ActionEvent event) throws SQLException, IOException {
         if(TF_ID_Book.getText().isEmpty()){
         }else{
          int id = Integer.parseInt(TF_ID_Book.getText());
          statement.executeUpdate("Delete From books where id = "+id);
          a.showAndWait();
+         ReBook.LogWriter.println("Delete books id = "+id+"\n");
+         ReBook.LogWriter.close();
          ShowBooks();
          reset();
          }
     }
 
     @FXML
-    void Delete_User(ActionEvent event) throws SQLException {
+    void Delete_User(ActionEvent event) throws SQLException, IOException {
         if(TF_ID_User.getText().isEmpty()){
         }else{
          int id = Integer.parseInt(TF_ID_User.getText());
          statement.executeUpdate("Delete From users where id = "+id);
          a.showAndWait();
+         ReBook.LogWriter.println("Delete User id = "+id+" \n");
+         ReBook.LogWriter.close();
          ShowUsers();
          reset();
          }

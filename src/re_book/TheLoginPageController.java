@@ -80,8 +80,8 @@ public class TheLoginPageController implements Initializable {
                 String Pass = RS.getString("pass");
                 String Name = RS.getString("name");
                 if(idA == TF_ID && Pass.equals(TF_Pass) && Name.equals(TF_Name)){
-//                    ReBook.S = new Scene(ReBook.Admin_Control_Panel);
-                    
+                    ReBook.LogWriter.println("The Admin "+TF_ID+" Login \n");
+//                    ReBook.LogWriter.close();
                     Pane flowPane = FXMLLoader.load(getClass().getResource("Admin_Control_Panel.fxml"));
                     Stage dilog1 = new Stage();
                     Scene man1 = new Scene(flowPane);
@@ -116,7 +116,8 @@ public class TheLoginPageController implements Initializable {
                 if(Name.equals(TF_Name) 
                         && Pass.equals(md5Java(TF_Pass))
                         ){
-//                    ReBook.S = new Scene(ReBook.Book_View);
+                    ReBook.LogWriter.println("The User "+TF_Name+" Login \n");
+//                    ReBook.LogWriter.close();
                     Pane flowPane = FXMLLoader.load(getClass().getResource("Book_View.fxml"));
                     Stage dilog1 = new Stage();
                     Scene man1 = new Scene(flowPane);

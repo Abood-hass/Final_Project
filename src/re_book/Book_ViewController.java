@@ -125,6 +125,8 @@ public class Book_ViewController implements Initializable {
         }
         this.statement.executeUpdate("INSERT INTO buy_rent(user_id, book_id, Expiration,Operation_Type) VALUES ('"+user_id+"', '"+book_id+"', '"+0+"', 'Buy')");
         a.show();
+        ReBook.LogWriter.println("The User id = '"+user_id+"' Rent '"+book_id+"' ");
+        ReBook.LogWriter.close();
         show();
         }else{
             Alert Wrong_Buy = new Alert(AlertType.WARNING);
@@ -148,6 +150,8 @@ public class Book_ViewController implements Initializable {
         }
         this.statement.executeUpdate("INSERT INTO buy_rent(user_id, book_id, Expiration,Operation_Type) VALUES ('"+user_id+"', '"+book_id+"', '"+Expiration+"', 'Rent')");
         a.show();
+        ReBook.LogWriter.println("The User id = '"+user_id+"' Rent '"+book_id+"' for '"+Expiration+"' Week/s");
+        ReBook.LogWriter.close();
         show();
         }else{
             Alert Wrong_Rent = new Alert(AlertType.WARNING);
