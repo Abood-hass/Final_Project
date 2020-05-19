@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -36,7 +35,6 @@
       </Button>
       <TextField fx:id="TF_ID_User" alignment="CENTER" layoutX="990.0" layoutY="46.0" prefHeight="22.0" prefWidth="170.0" />
       <TextField fx:id="TF_Name_User" alignment="CENTER" layoutX="990.0" layoutY="97.0" prefHeight="22.0" prefWidth="170.0" />
-      <PasswordField fx:id="TF_Password" alignment="CENTER" layoutX="990.0" layoutY="149.0" prefHeight="22.0" prefWidth="170.0" />
       <DatePicker fx:id="DP_Birth_Date" layoutX="990.0" layoutY="200.0" prefHeight="21.0" prefWidth="170.0" />
       <TextField fx:id="TF_Balance" alignment="CENTER" layoutX="990.0" layoutY="250.0" prefHeight="22.0" prefWidth="170.0" />
       <Text fontSmoothingType="LCD" layoutX="642.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID" textAlignment="CENTER" wrappingWidth="41.607421875">
@@ -137,5 +135,6 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
+      <TextField fx:id="TF_Password" alignment="CENTER" layoutX="990.0" layoutY="149.0" prefHeight="22.0" prefWidth="170.0" />
    </children>
 </Pane>

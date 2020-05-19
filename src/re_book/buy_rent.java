@@ -14,7 +14,8 @@ import java.util.Date;
 public class buy_rent {
     private int user_id;
     private int book_id;
-    private Date Expiration;
+    private int Expiration;
+    private String operation_type;
 
     public buy_rent() {
         
@@ -36,12 +37,20 @@ public class buy_rent {
         this.book_id = book_id;
     }
 
-    public Date getExpiration() {
+    public int getExpiration() {
         return Expiration;
     }
 
-    public void setExpiration(Date Expiration) {
+    public void setExpiration(int Expiration) {
         this.Expiration = Expiration;
+    }
+
+    public String getOperation_type() {
+        return operation_type;
+    }
+
+    public void setOperation_type(String operation_type) {
+        this.operation_type = operation_type;
     }
     
     

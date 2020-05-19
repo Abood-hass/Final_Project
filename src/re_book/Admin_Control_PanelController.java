@@ -5,20 +5,21 @@
  */
 package re_book;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -33,7 +34,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author AboodHassKov
  */
-public class Admin_Control_PanelController implements Initializable {
+public class Admin_Control_PanelController implements Initializable{
     String Ranks[]={"Scientific" ,"Cultural" ,"entertainment" ,"Historical"};
     @FXML
     private TableView<Users> TV_Users;
@@ -105,7 +106,7 @@ public class Admin_Control_PanelController implements Initializable {
     private TextField TF_Name_User;
 
     @FXML
-    private PasswordField TF_Password;
+    private TextField TF_Password;
 
     @FXML
     private DatePicker DP_Birth_Date;
@@ -126,8 +127,9 @@ public class Admin_Control_PanelController implements Initializable {
     private TextField TF_Age_User;
     
     Statement statement;
-//    EntityManager em = emf.createEntityManager();
     
+    
+    Alert a = new Alert(Alert.AlertType.CONFIRMATION);
     /**
      * Initializes the controller class.
      * @param url
@@ -140,7 +142,7 @@ public class Admin_Control_PanelController implements Initializable {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 java.sql.Connection connection =
                         DriverManager
-                                .getConnection("jdbc:mysql://127.0.0.1:3306/book_store?serverTimezone=UTC","root","");
+                                .getConnection("jdbc:mysql://127.0.0.1:3306/rebook?serverTimezone=UTC","root","");
                 this.statement = connection.createStatement();
             } catch (ClassNotFoundException | SQLException ex) {
             }        
@@ -175,36 +177,34 @@ public class Admin_Control_PanelController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(Admin_Control_PanelController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+    a.setContentText("Make Sure To Modify on DateBase !!!");
     }    
 
     @FXML
      void Add_User(ActionEvent event) throws SQLException {
         
-              int id = Integer.parseInt(TF_ID_User.getText());
+         int id = Integer.parseInt(TF_ID_User.getText());
          double Balance = Double.parseDouble(TF_Balance.getText());
-         
-//         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-//            Date date = new Date();
-            
-//    if(DP_Birth_Date.getValue().isBefore(D)){
+         String Pass = TF_Password.getText();
             this.statement.executeUpdate("Insert into users (id, name, Password, date_birth, age, balance)"
-                + "Values ("+id+",'"+TF_Name_User.getText()+"','"+TF_Password.getText()+"','"+DP_Birth_Date.getValue()+"', "+TF_Age_User.getText()+","+Balance+")");
-    
-         
+                + "Values ("+id+",'"+TF_Name_User.getText()+"','"+md5Java(Pass)+"','"+DP_Birth_Date.getValue()+"', "+TF_Age_User.getText()+","+Balance+")");
+            a.showAndWait();
         ShowUsers();
          reset();
     }
-//    }
-   
-    
+     
     @FXML
      void Edit_User(ActionEvent event) throws SQLException{
          if(TF_ID_User.getText().isEmpty() || TF_Name_User.getText().isEmpty() 
                  || TF_Balance.getText().isEmpty() || TF_Age_User.getText().isEmpty() || TF_Password.getText().isEmpty()){
         }else{
+         String Pass = TF_Password.getText();
          int id = Integer.parseInt(TF_ID_User.getText());
          double Balance = Double.parseDouble(TF_Balance.getText());
-         statement.executeUpdate("Update users SET name = '"+TF_Name_User.getText()+"' ,  Balance = '"+TF_Balance.getText()+"' ,Password = "+TF_Password.getText()+"   where id = "+id);
+         
+         statement.executeUpdate("Update users SET name = '"+TF_Name_User.getText()+"' ,  Balance = '"+Balance+"' ,Password = '"+md5Java(Pass)+"'   where id = "+id);
+         a.showAndWait();
          ShowUsers();
          reset();
          }
@@ -219,6 +219,7 @@ public class Admin_Control_PanelController implements Initializable {
          
         this.statement.executeUpdate("Insert into books Values"
                 + "("+id+",'"+TF_Title_Book.getText()+"','"+TF_Author.getText()+"', '"+CM_Rank.getValue()+"','"+DP_Release_Date.getValue()+"',"+Price+")");
+        a.showAndWait();
         ShowBooks();
         reset();
      }
@@ -231,6 +232,7 @@ public class Admin_Control_PanelController implements Initializable {
          int id = Integer.parseInt(TF_ID_Book.getText());
          double Price = Double.parseDouble(TF_Price.getText());
          statement.executeUpdate("Update books SET title = '"+TF_Title_Book.getText()+"' ,  author = '"+TF_Author.getText()+"' ,price = "+Price+",  ranking = '"+CM_Rank.getValue()+"'   where id = "+id);
+         a.showAndWait();
          ShowBooks();
          reset();
          }
@@ -242,6 +244,7 @@ public class Admin_Control_PanelController implements Initializable {
         }else{
          int id = Integer.parseInt(TF_ID_Book.getText());
          statement.executeUpdate("Delete From books where id = "+id);
+         a.showAndWait();
          ShowBooks();
          reset();
          }
@@ -253,6 +256,7 @@ public class Admin_Control_PanelController implements Initializable {
         }else{
          int id = Integer.parseInt(TF_ID_User.getText());
          statement.executeUpdate("Delete From users where id = "+id);
+         a.showAndWait();
          ShowUsers();
          reset();
          }
@@ -324,12 +328,27 @@ public class Admin_Control_PanelController implements Initializable {
         TF_ID_Book.setText(selected_book.getId()+"");
         TF_Title_Book.setText(selected_book.getTitle());
         CM_Rank.setValue(selected_book.getRanking());
-//        DP_Release_Date.setValue(selected_book.getReleaseDate()+"");
+        
         TF_Author.setText(selected_book.getAuthor());
         TF_Price.setText(selected_book.getPrice()+"");
         
     }
     }
     
+    public static String md5Java(String message) {
+        String digest = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(message.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder(2 * hash.length);
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            digest = sb.toString();
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+
+        }
+        return digest;
+    }
     
 }
